@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Öğrenci Kayıt Sistemi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Header & Nav -->
+        <header class="app-header">
+            <div class="logo" style="display: flex; align-items: center; gap: 0.8rem;">
+                <img src="logo.png" alt="Uğur Okulları Logo" style="height: 32px; object-fit: contain;">
+                <h1 style="display: flex; align-items: baseline; gap: 0.5rem; margin: 0;">Uğur Okulları Öğrenci Kayıt Sistemi <span style="font-size: 0.6em; opacity: 0.7; font-weight: normal; background: #2b6cb0; color: white; padding: 0.1rem 0.4rem; border-radius: 4px;">v0.1</span></h1>
+            </div>
+            <nav class="app-tabs">
+                <button class="tab-btn active" data-tab="kayit-formu">Kayıt Formu</button>
+                <button class="tab-btn" data-tab="ogrenci-listesi">Öğrenci Listesi</button>
+                <button class="tab-btn" data-tab="kontrol-paneli">Kontrol Paneli</button>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-content">
+            
+            <!-- KAYIT FORMU SEKME İÇERİĞİ -->
+            <section id="kayit-formu" class="tab-pane active">
+                <form id="studentForm" class="record-form">
+                    <input type="hidden" id="editingId" value="">
+                    
+                    <div class="distinct-section" style="margin-top: 0;">
+                        <div class="distinct-header">
+                            <h2 class="column-title" style="margin-bottom: 0;">ÖĞRENCİ VE KAYIT BİLGİLERİ</h2>
+                            <span class="distinct-badge">Temel Profil</span>
+                        </div>
+                        <div class="form-grid" style="margin-top: 1.5rem;">
+                            
+                            <!-- Sol Sütun: Öğrenci ve Veli Bilgileri -->
+                            <div class="form-column">
+                            
+                            <div class="form-group">
+                                <label for="tcNo">TC Numarası <span class="required">*</span></label>
+                                <input type="number" id="tcNo" name="tcNo" required placeholder="Örn: 12345678910">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sinif">Sınıfı <span class="required">*</span></label>
+                                <select id="sinif" name="sinif" required>
+                                    <!-- Dinamik Dolacak -->
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="veliAdSoyad">Veli Adı Soyadı <span class="required">*</span></label>
+                                <input type="text" id="veliAdSoyad" name="veliAdSoyad" required placeholder="Veli Ad Soyad">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="telefon">Telefon Numarası</label>
+                                <input type="tel" id="telefon" name="telefon" placeholder="0(555) 555 55 55">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="kayitTarihi">Kayıt Tarihi <span class="required">*</span></label>
+                                <input type="date" id="kayitTarihi" name="kayitTarihi" required>
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <div class="form-group">
+                                <label for="kardesTcNo">Kardeş TC Numarası</label>
+                                <input type="number" id="kardesTcNo" name="kardesTcNo" placeholder="Opsiyonel">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="kardesUcret">Kardeş Peşin Eğitim Ücreti</label>
+                                <input type="text" id="kardesUcret" name="kardesUcret" placeholder="₺ 0,00" class="money-input">
+                            </div>
+                        </div>
+
+                        <!-- Sağ Sütun: Kayıt Detayları -->
+                        <div class="form-column">
+
+                            <div class="form-group">
+                                <label for="kayitBilgisi">Kayıt Bilgisi <span class="required">*</span></label>
+                                <select id="kayitBilgisi" name="kayitBilgisi" required>
+                                    <!-- Dinamik Dolacak -->
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="kayitTipi">Kayıt Tipi <span class="required">*</span></label>
+                                <select id="kayitTipi" name="kayitTipi" required>
+                                    <!-- Dinamik Dolacak -->
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="kayitTipiDetayi">Kayıt Tipi Detayı</label>
+                                <select id="kayitTipiDetayi" name="kayitTipiDetayi">
+                                    <option value="MALİYE VAKFI">Maliye Vakfı</option>
+                                    <option value="UBB">UBB</option>
+                                    <option value="UBS">UBS</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group row-group">
+                                <div class="col">
+                                    <label for="gelisSekli">Geliş Şekli <span class="required">*</span></label>
+                                    <select id="gelisSekli" name="gelisSekli" required>
+                                        <!-- Dinamik Dolacak -->
+                                    </select>
+                                </div>
+                                <div class="col mt-auto pb-2 pl-2">
+                                    <div class="radio-group" style="display: none;" id="gelisSekliDurumContainer">
+                                         <!-- Olumlu/Olumsuz might be requested based on text, however text says "ve yanlarında Olumlu/Olumsuz durumu".
+                                              Actually the image shows standard fields. Let's just create these in the dropdown or as a sub-field. -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- According to the image, Codem Sonucu is a separate row. -->
+                            <div class="form-group">
+                                <label for="codemSonucu">Codem Sonucu <span class="required">*</span></label>
+                                <select id="codemSonucu" name="codemSonucu" required>
+                                    <option value="OLUMLU">Olumlu</option>
+                                    <option value="OLUMSUZ">Olumsuz</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    
+                    <!-- GELDİĞİ OKUL -->
+                    <div class="distinct-section">
+                        <div class="distinct-header">
+                            <h2 class="column-title" style="margin-bottom: 0;">GELDİĞİ OKUL BİLGİLERİ</h2>
+                            <span class="distinct-badge">MEB Kayıtları</span>
+                        </div>
+                        <div class="row-group" style="display:flex; gap: 2rem; margin-top: 1rem;">
+                            <div class="form-group" style="flex:1;">
+                                <label for="geldigiIl">İl <span class="required">*</span></label>
+                                <select id="geldigiIl" name="geldigiIl" required>
+                                    <option value="" disabled selected>Yükleniyor...</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex:1;">
+                                <label for="geldigiIlce">İlçe <span class="required">*</span></label>
+                                <select id="geldigiIlce" name="geldigiIlce" required disabled>
+                                    <option value="" disabled selected>Önce İl Seçiniz</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex:2;">
+                                <label for="geldigiOkul">Okul <span class="required">*</span></label>
+                                <select id="geldigiOkul" name="geldigiOkul" required disabled>
+                                    <option value="" disabled selected>Önce İlçe Seçiniz</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- FİNANS VE ÖDEME BİLGİLERİ -->
+                    <div class="distinct-section finance-section">
+                        <div class="distinct-header">
+                            <h2 class="column-title" style="margin-bottom: 0;">FİNANS VE ÖDEME BİLGİLERİ</h2>
+                            <span class="distinct-badge">Ödeme & Taksit İşlemleri</span>
+                        </div>
+                        
+                        <div class="finance-grid" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; flex-wrap: wrap;">
+                            
+                            <!-- SÜTUN 1: ÜCRET BİLGİLERİ -->
+                            <div class="finance-col">
+                                <h3 class="finance-sub-title center">EĞİTİM ÜCRET BİLGİLERİ</h3>
+                                <div class="form-group flex-row">
+                                    <label>İndirim Oranı</label>
+                                    <input type="text" id="egitimIndirimOrani" class="input-calc-e" placeholder="Örn: 10%">
+                                </div>
+                                <div class="form-group flex-row">
+                                    <label>Ödeme Şekli</label>
+                                    <select id="egitimOdemeSekli">
+                                        <option value="KK VADELİ">KK VADELİ</option>
+                                        <option value="NAKİT">NAKİT / HAVALE</option>
+                                    </select>
+                                </div>
+                                <div class="form-group flex-row">
+                                    <label>Vade Başlangıç</label>
+                                    <input type="date" id="egitimVadeTarihi">
+                                </div>
+                                <div class="form-group flex-row">
+                                    <label>Taksit Sayısı</label>
+                                    <select id="egitimTaksit">
+                                        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+                                        <option value="5">5</option><option value="6" selected>6</option><option value="7">7</option><option value="8">8</option>
+                                        <option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                                    </select>
+                                </div>
+                                <div class="form-group flex-row">
+                                    <label>Artı Taksit</label>
+                                    <input type="text" id="egitimArtiTaksit" placeholder="Örn: +2">
+                                </div>
+                                <div class="form-group flex-row">
+                                    <label>Peşinat Alt Limit</label>
+                                    <input type="text" id="egitimPesinatLimit" class="money-input" value="0">
+                                </div>
+                            </div>
+                            
+                            <!-- SÜTUN 2: EĞİTİM ÖDEME BİLGİLERİ -->
+                            <div class="finance-col">
+                                <h3 class="finance-sub-title center" style="color: var(--primary-color);">EĞİTİM ÖDEME BİLGİLERİ</h3>
+                                <div class="payment-inputs">
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label>Nakit / Havale</label>
+                                        <input type="text" id="ep_Nakit" class="money-input input-calc-e" value="0">
+                                    </div>
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label>Kredi Kartı Tek Çekim</label>
+                                        <input type="text" id="ep_KkTek" class="money-input input-calc-e" value="0">
+                                    </div>
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label>Kredi Kartı Vadeli</label>
+                                        <input type="text" id="ep_KkVadeli" class="money-input input-calc-e" value="0">
+                                        <span class="inline-val" id="ep_AylikTutar" style="text-align: left; width: auto; font-size: 0.7rem; color: var(--primary-color);">0</span>
+                                    </div>
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label>Sanal Pos Tek Çekim</label>
+                                        <input type="text" id="ep_SpTek" class="money-input input-calc-e" value="0">
+                                    </div>
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label>Sanal Pos Vadeli</label>
+                                        <input type="text" id="ep_SpVadeli" class="money-input input-calc-e" value="0">
+                                    </div>
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label>OTS</label>
+                                        <input type="text" id="ep_Ots" class="money-input input-calc-e" value="0">
+                                    </div>
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label>Mahsup</label>
+                                        <input type="text" id="ep_Mahsup" class="money-input input-calc-e" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- SÜTUN 3: YEMEK ÜCRET BİLGİLERİ -->
+                            <div class="finance-col">
+                                <h3 class="finance-sub-title center">YEMEK ÜCRET BİLGİLERİ</h3>
+                                <div class="form-group flex-row">
+                                    <label>Yemek Servisi</label>
+                                    <select id="yemekDurumu">
+                                        <option value="HAYIR" selected>HAYIR</option>
+                                        <option value="EVET">EVET (Seçildiğinde Açılır)</option>
+                                    </select>
+                                </div>
+                                <div class="yemek-fields disable-overlay" id="yemekFieldsContainer">
+                                    <div class="form-group flex-row">
+                                        <label>Ödeme Şekli</label>
+                                        <select id="yemekOdemeSekli">
+                                            <option value="KK VADELİ">KK VADELİ</option>
+                                            <option value="NAKİT">NAKİT / HAVALE</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group flex-row">
+                                        <label>Vade Başlangıç</label>
+                                        <input type="date" id="yemekVadeTarihi">
+                                    </div>
+                                    <div class="form-group flex-row">
+                                        <label>Taksit Sayısı</label>
+                                        <select id="yemekTaksit">
+                                            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+                                            <option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8" selected>8</option>
+                                            <option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group flex-row">
+                                        <label>Artı Taksit</label>
+                                        <input type="text" id="yemekArtiTaksit">
+                                    </div>
+                                    <div class="form-group flex-row">
+                                        <label>Peşinat Alt Limit</label>
+                                        <input type="text" id="yemekPesinatLimit" class="money-input" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- SÜTUN 4: YEMEK ÖDEME BİLGİLERİ -->
+                            <div class="finance-col">
+                                <h3 class="finance-sub-title center" style="color: var(--primary-color);">YEMEK ÖDEME BİLGİLERİ</h3>
+                                <div class="payment-inputs yemek-fields disable-overlay">
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label>Nakit / Havale</label>
+                                        <input type="text" id="yp_Nakit" class="money-input input-calc-y" value="0">
+                                    </div>
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label>Kredi Kartı Tek Çekim</label>
+                                        <input type="text" id="yp_KkTek" class="money-input input-calc-y" value="0">
+                                    </div>
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label>Kredi Kartı Vadeli</label>
+                                        <input type="text" id="yp_KkVadeli" class="money-input input-calc-y" value="0">
+                                        <span class="inline-val" id="yp_AylikTutar" style="text-align: left; width: auto; font-size: 0.7rem; color: var(--primary-color);">0</span>
+                                    </div>
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label>Sanal Pos Tek Çekim</label>
+                                        <input type="text" id="yp_SpTek" class="money-input input-calc-y" value="0">
+                                    </div>
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label>Sanal Pos Vadeli</label>
+                                        <input type="text" id="yp_SpVadeli" class="money-input input-calc-y" value="0">
+                                    </div>
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label>OTS</label>
+                                        <input type="text" id="yp_Ots" class="money-input input-calc-y" value="0">
+                                    </div>
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label>Mahsup</label>
+                                        <input type="text" id="yp_Mahsup" class="money-input input-calc-y" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ALT BÖLÜM: TOPLAMLAR GRID (Eğitim, Yemek, Genel) -->
+                        <div style="border-top: 2px solid var(--border-color); padding-top: 1.5rem; margin-top: 2rem;">
+                            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem;">
+                                
+                                <!-- EĞİTİM TOPLAMLARI -->
+                                <div class="totals-area" style="background:#f8fafc; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <h4 style="margin-top: 0; margin-bottom: 1.5rem; color: var(--text-main); font-size: 0.95rem; text-align:center; font-weight:700;">EĞİTİM TOPLAM BİLGİSİ</h4>
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label>Eğitim Ücreti (KDV'siz)</label>
+                                        <input type="text" id="ep_NetUcret" class="money-input readonly-input" readonly tabindex="-1">
+                                    </div>
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label style="display: flex; align-items: center; gap: 0.2rem;">
+                                            <input type="number" id="egitimKdvOrani" class="input-calc-e" value="10" style="width: 45px !important; padding: 0.2rem; text-align: center; border: 1px solid var(--border-color); border-radius: 4px;"> % KDV Tutarı
+                                        </label>
+                                        <input type="text" id="ep_KdvTutar" class="money-input readonly-input" readonly tabindex="-1">
+                                    </div>
+                                    <div class="form-group flex-row form-inline-custom highlight-dark">
+                                        <label>Toplam Eğitim Ücreti</label>
+                                        <input type="text" id="ep_Toplam" class="money-input readonly-input" readonly tabindex="-1">
+                                    </div>
+                                    <div class="divider" style="margin: 1rem 0;"></div>
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label>Toplam Peşinat Tutarı</label>
+                                        <input type="text" id="ep_Pesinat" class="money-input readonly-input" readonly tabindex="-1">
+                                    </div>
+                                </div>
+                                
+                                <!-- YEMEK TOPLAMLARI -->
+                                <div class="totals-area yemek-fields disable-overlay" style="background:#f8fafc; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <h4 style="margin-top: 0; margin-bottom: 1.5rem; color: var(--text-main); font-size: 0.95rem; text-align:center; font-weight:700;">YEMEK TOPLAM BİLGİSİ</h4>
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label>Yemek Ücreti (KDV'siz)</label>
+                                        <input type="text" id="yp_NetUcret" class="money-input readonly-input" readonly tabindex="-1">
+                                    </div>
+                                    <div class="form-group flex-row form-inline-custom">
+                                        <label style="display: flex; align-items: center; gap: 0.2rem;">
+                                            <input type="number" id="yemekKdvOrani" class="input-calc-y" value="10" style="width: 45px !important; padding: 0.2rem; text-align: center; border: 1px solid var(--border-color); border-radius: 4px;"> % KDV Tutarı
+                                        </label>
+                                        <input type="text" id="yp_KdvTutar" class="money-input readonly-input" readonly tabindex="-1">
+                                    </div>
+                                    <div class="form-group flex-row form-inline-custom highlight-dark">
+                                        <label>Toplam Yemek Ücreti</label>
+                                        <input type="text" id="yp_Toplam" class="money-input readonly-input" readonly tabindex="-1">
+                                    </div>
+                                </div>
+                                
+                                <!-- GENEL TOPLAMLAR -->
+                                <div class="totals-area" style="background:#eafaf1; padding: 1.5rem; border-radius: 8px; border: 1px solid #b1e0b5;">
+                                    <h4 style="margin-top: 0; margin-bottom: 1.5rem; color: #1e4529; font-size: 0.95rem; text-align:center; font-weight:700;">GENEL ÖZET</h4>
+                                    <div class="form-group flex-row form-inline-custom highlight-green" style="margin-top: 1rem; border-bottom: none;">
+                                        <label style="font-size: 0.95rem;">Genel Toplam (Eğt + Yem)</label>
+                                        <input type="text" id="z_GenelToplam" class="money-input readonly-input" readonly tabindex="-1" style="font-size: 1.1rem; width: 140px !important;">
+                                    </div>
+                                    <div class="divider" style="margin: 0.5rem 0;"></div>
+                                    <div class="form-group flex-row form-inline-custom" style="border-bottom: none;">
+                                        <label>Genel Toplam Taksit</label>
+                                        <input type="text" id="z_GenelTaksit" class="money-input readonly-input" readonly tabindex="-1">
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions" style="margin-top: 3rem;">
+                        <button type="button" class="btn btn-secondary" id="formResetBtn">Sıfırla</button>
+                        <button type="submit" class="btn btn-primary" id="formSubmitBtn">Kaydet</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- ÖĞRENCİ LİSTESİ SEKME İÇERİĞİ -->
+            <section id="ogrenci-listesi" class="tab-pane">
+                <div class="list-header">
+                    <h2>Kayıtlı Öğrenciler</h2>
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="TC No veya İsim ile ara...">
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>TC No</th>
+                                <th>Öğrenci Sınıfı</th>
+                                <th>Veli Adı Soyadı</th>
+                                <th>Kayıt Tipi</th>
+                                <th>Kayıt Tarihi</th>
+                                <th class="text-right">İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody">
+                            <!-- JS ile doldurulacak -->
+                        </tbody>
+                    </table>
+                    <div id="emptyState" class="empty-state">
+                        <p>Henüz öğrenci kaydı bulunmamaktadır.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- KONTROL PANELİ SEKME İÇERİĞİ -->
+            <section id="kontrol-paneli" class="tab-pane">
+                <div class="list-header">
+                    <h2>Kontrol Paneli (Sistem Ayarları)</h2>
+                </div>
+                
+                <div class="settings-grid">
+                    
+                    <!-- Sınıf Ayarları -->
+                    <div class="settings-card">
+                        <h3>Sınıflar</h3>
+                        <div class="settings-add-form">
+                            <input type="text" id="newSinifInput" placeholder="Örn: 13. Sınıf">
+                            <button class="btn btn-primary btn-sm" onclick="addSetting('sinifList', 'newSinifInput')">Ekle</button>
+                        </div>
+                        <ul class="settings-list" id="sinifListContainer">
+                            <!-- JS ile dolacak -->
+                        </ul>
+                    </div>
+
+                    <!-- Kayıt Bilgisi Ayarları -->
+                    <div class="settings-card">
+                        <h3>Kayıt Bilgisi Sçn.</h3>
+                        <div class="settings-add-form">
+                            <input type="text" id="newKayitBilgisiInput" placeholder="Örn: Yeni Kayıt">
+                            <button class="btn btn-primary btn-sm" onclick="addSetting('kayitBilgisiList', 'newKayitBilgisiInput')">Ekle</button>
+                        </div>
+                        <ul class="settings-list" id="kayitBilgisiListContainer">
+                        </ul>
+                    </div>
+
+                    <!-- Kayıt Tipi Ayarları -->
+                    <div class="settings-card">
+                        <h3>Kayıt Tipi Sçn.</h3>
+                        <div class="settings-add-form">
+                            <input type="text" id="newKayitTipiInput" placeholder="Örn: İç Kayıt">
+                            <button class="btn btn-primary btn-sm" onclick="addSetting('kayitTipiList', 'newKayitTipiInput')">Ekle</button>
+                        </div>
+                        <ul class="settings-list" id="kayitTipiListContainer">
+                        </ul>
+                    </div>
+
+                    <!-- Geliş Şekli Ayarları -->
+                    <div class="settings-card">
+                        <h3>Geliş Şekli Sçn.</h3>
+                        <div class="settings-add-form">
+                            <input type="text" id="newGelisSekliInput" placeholder="Örn: Web">
+                            <button class="btn btn-primary btn-sm" onclick="addSetting('gelisSekliList', 'newGelisSekliInput')">Ekle</button>
+                        </div>
+                        <ul class="settings-list" id="gelisSekliListContainer">
+                        </ul>
+                    </div>
+                    
+                    <!-- Finans / Kredi Kartı Faiz Oranı Ayarı -->
+                    <div class="settings-card">
+                        <h3>Finans Ayarları (KV)</h3>
+                        <div class="settings-add-form" style="display: flex; gap: 0.5rem; align-items: center;">
+                            <label style="font-size: 0.85rem; font-weight: 600;">K.K Aylık Faiz (%):</label>
+                            <input type="number" step="0.01" id="kkFaizInput" placeholder="Örn: 4.25" style="width: 80px; padding: 0.2rem 0.5rem;">
+                            <button class="btn btn-primary btn-sm" onclick="saveKkFaiz()">Kaydet</button>
+                        </div>
+                        <ul class="settings-list">
+                            <li><span style="font-size: 0.8rem; color: var(--text-muted);">Güncel Faiz: <strong id="currentKkFaiz">4.25</strong> %</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden">İşlem başarılı!</div>
+
+    <!-- Detay Modal -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalStudentName">Öğrenci Detayı</h2>
+                <button class="close-modal-btn" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- JS ile Doldurulacak -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CSV Data -->
+    <script src="schoolsData.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
