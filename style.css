@@ -702,7 +702,7 @@ body {
     text-align: right;
 }
 
-/* Responsive */
+/* Responsive Mükemmel Uyumluluk */
 @media (max-width: 768px) {
     body {
         padding: 0;
@@ -712,7 +712,65 @@ body {
         min-height: 100vh;
     }
     .form-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+    
+    /* Yan yana olan inputların (İl/İlçe vs) alt alta inmesi */
+    .row-group {
+        flex-direction: column !important;
+        gap: 1rem !important;
+    }
+
+    /* 4 Kolonlu Finans alanı */
+    .finance-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 2rem !important;
+    }
+
+    /* En alttaki Toplamlar (Eğitim, Yemek, Genel) -> 3'lü kolon iptali */
+    div[style*="repeat(3"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* App Header ve Menüler mobilde yatay scroll & düzen */
+    .app-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 1rem !important;
+        padding: 1rem !important;
+    }
+    .app-tabs {
+        width: 100% !important;
+        overflow-x: auto !important;
+        flex-wrap: nowrap !important;
+        padding-bottom: 0.5rem !important;
+        justify-content: flex-start !important;
+    }
+    .tab-btn {
+        flex-shrink: 0 !important;
+    }
+
+    /* Modal (Öğrenci Detay) Düzeni */
+    .modal-content {
+        width: 95% !important;
+        padding: 1rem !important;
+        margin: 2rem auto !important;
+    }
+
+    /* Modal İçerisindeki Finans 1fr 1fr grid */
+    div[style*="1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+
+    /* Modal İçindeki Tabloların taşmasını engelleme (yatay scroll) */
+    table {
+        display: block !important;
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        width: 100% !important;
     }
 }
+
